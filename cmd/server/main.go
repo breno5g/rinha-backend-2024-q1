@@ -1,9 +1,11 @@
 package main
 
-import (
-	"fmt"
-)
+import "github.com/breno5g/rinha-backend-2024-q1/config"
 
 func main() {
-	fmt.Println("Hello, World!")
+	err := config.Init()
+	if err != nil {
+		panic(err)
+	}
+
 }
