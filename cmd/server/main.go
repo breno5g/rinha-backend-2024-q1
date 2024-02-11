@@ -1,6 +1,9 @@
 package main
 
-import "github.com/breno5g/rinha-backend-2024-q1/config"
+import (
+	"github.com/breno5g/rinha-backend-2024-q1/config"
+	"github.com/breno5g/rinha-backend-2024-q1/internal/router"
+)
 
 func main() {
 	err := config.Init()
@@ -8,4 +11,5 @@ func main() {
 		panic(err)
 	}
 
+	router.Init()
 }

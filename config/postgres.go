@@ -3,17 +3,16 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"os"
 
 	_ "github.com/lib/pq"
 )
 
 var (
-	host  = os.Getenv("POSTGRES_HOST")
+	host  = "localhost"
 	port  = 5432
-	user  = os.Getenv("POSTGRES_USER")
-	pass  = os.Getenv("POSTGRES_PASSWORD")
-	dbase = os.Getenv("POSTGRES_DB")
+	user  = "admin"
+	pass  = "123"
+	dbase = "rinha"
 )
 
 func getPostgresConnection() (*sql.DB, error) {
