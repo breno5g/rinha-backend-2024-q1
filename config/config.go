@@ -1,9 +1,11 @@
 package config
 
-import "database/sql"
+import (
+	"github.com/jackc/pgx/v5/pgxpool"
+)
 
 var (
-	db *sql.DB
+	db *pgxpool.Pool
 )
 
 func Init() error {
@@ -16,6 +18,6 @@ func Init() error {
 	return nil
 }
 
-func GetDB() *sql.DB {
+func GetDB() *pgxpool.Pool {
 	return db
 }
