@@ -8,21 +8,18 @@ services:
       - DB_HOSTNAME=db
     expose:
       - "8080"
-    ports:
-      - "8080:3001"
     depends_on:
       db:
         condition: service_healthy
     deploy:
       resources:
         limits:
-          cpus: "0.6"
-          memory: "200MB"
+          cpus: "0.2"
+          memory: "150MB"
+
   api02:
     <<: *api
     hostname: api02
-    environment:
-      - DB_HOSTNAME=db
   nginx:
     image: nginx:latest
     volumes:
@@ -35,8 +32,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.17"
-          memory: "10MB"
+          cpus: "0.15"
+          memory: "20MB"
   db:
     image: postgres:latest
     hostname: db
@@ -48,16 +45,18 @@ services:
       - "5432:5432"
     volumes:
       - ./script.sql:/docker-entrypoint-initdb.d/script.sql
+    command: postgres -c checkpoint_timeout=600 -c max_wal_size=4096
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 30s
-      timeout: 30s
-      retries: 3
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     deploy:
       resources:
         limits:
-          cpus: "0.13"
-          memory: "140MB"
+          cpus: "0.95"
+          memory: "230MB"
 
 networks:
   default:

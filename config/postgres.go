@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	host  = "localhost"
+	host  = "db"
 	port  = 5432
 	user  = "admin"
 	pass  = "123"
@@ -33,8 +33,6 @@ func getPostgresConnection() (*pgxpool.Pool, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	defer db.Close()
 
 	return db, nil
 }
