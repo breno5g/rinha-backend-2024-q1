@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  api01: &api # image: breno5g/rinha-back-2024-q1:latest
-    build: .
+  api01: &api
+    image: breno5g/rinha-back-2024-q1:latest
     hostname: api01
     environment:
       - DB_HOSTNAME=db
