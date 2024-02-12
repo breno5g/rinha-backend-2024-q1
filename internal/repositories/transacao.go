@@ -49,7 +49,7 @@ func (r *repository) CreateTransaction(ctx context.Context, transaction entity.T
 
 func (r *repository) GetBalance(ctx context.Context, clientId int) (entity.Cliente, error) {
 	var cliente entity.Cliente
-	err := r.db.QueryRow(ctx, "SELECT id, nome, saldo FROM public.clientes WHERE id = $1", clientId).Scan(&cliente.ID, &cliente.Nome, &cliente.Saldo)
+	err := r.db.QueryRow(ctx, "SELECT id, nome, saldo, limite FROM public.clientes WHERE id = $1", clientId).Scan(&cliente.ID, &cliente.Nome, &cliente.Saldo, &cliente.Limite)
 	if err != nil {
 		return entity.Cliente{}, err
 	}
@@ -57,7 +57,7 @@ func (r *repository) GetBalance(ctx context.Context, clientId int) (entity.Clien
 }
 
 func (r *repository) GetTransactions(ctx context.Context, clientId int) ([]entity.Transacao, error) {
-	rows, err := r.db.Query(ctx, "SELECT id, tipo, descricao, valor, cliente_id FROM public.transacoes WHERE cliente_id = $1", clientId)
+	rows, err := r.db.Query(ctx, "SELECT id, tipo, descricao, valor, cliente_id, realizada_em FROM public.transacoes WHERE cliente_id = $1 ORDER BY realizada_em DESC LIMIT 5", clientId)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (r *repository) GetTransactions(ctx context.Context, clientId int) ([]entit
 	var transactions []entity.Transacao
 	for rows.Next() {
 		var transaction entity.Transacao
-		err = rows.Scan(&transaction.ID, &transaction.Tipo, &transaction.Descricao, &transaction.Valor, &transaction.ClienteID)
+		err = rows.Scan(&transaction.ID, &transaction.Tipo, &transaction.Descricao, &transaction.Valor, &transaction.ClienteID, &transaction.RealizadaEm)
 		if err != nil {
 			return nil, err
 		}
