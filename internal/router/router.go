@@ -1,21 +1,26 @@
 package router
 
 import (
-	"fmt"
-
+	"github.com/breno5g/rinha-backend-2024-q1/config"
+	"github.com/breno5g/rinha-backend-2024-q1/internal/handlers"
+	"github.com/breno5g/rinha-backend-2024-q1/internal/repositories"
+	"github.com/breno5g/rinha-backend-2024-q1/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 func Init() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	db := config.GetDB()
+	repo := repositories.NewRepository(db)
+	service := service.NewService(repo)
+	controller := handlers.NewTransacaoController(service)
 
-	// apiPort := os.Getenv("API_PORT")
-	apiPort := 8080
-	r.Run(fmt.Sprintf(":%d", apiPort))
+	r.POST("/clientes/:id/transacoes", controller.CreateTransaction())
+	r.GET("/clientes/:id/extrato", controller.GetExtract())
+
+	// apiPort := 9999
+	// r.Run(fmt.Sprintf(":%d", apiPort))
+	r.Run()
 }
